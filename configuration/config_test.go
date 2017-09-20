@@ -17,6 +17,18 @@ func TestSetPath(t *testing.T) {
 }
 
 func TestParseConfig(t *testing.T) {
-	//TODO Implement this and add testfiles
+	var conf Config
+
+	conf.SetPath("testfiles/config.yml")
+
+	err := conf.Parse()
+	if err != nil {
+		t.Errorf("parsing of config file failed %s", conf.Path)
+	}
+	if conf.Botconfig.RunAsDaemon != false ||
+		conf.Botconfig.Token != "testtoken" ||
+		conf.Databaseconfig.Path != "testpath" {
+		t.Errorf("parsing of testfile failed [%+v]", conf)
+	}
 	return
 }
