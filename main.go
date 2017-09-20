@@ -1,17 +1,30 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"net/http"
 
 	"github.com/go-telegram-bot-api/telegram-bot-api"
+
+	"github.com/linant/beerbot/configuration"
 )
 
-const (
-	token = "417296719:AAFZUm-0aw6vrNpQ5Slps9XRLhsitvO-Juc"
+var (
+	token        = "THIS_SHOULD_BE_SECRET_TOKEN"
+	databasePath = "/tmp/db"
+	configPath   = "/tmp"
 )
 
 func main() {
+	//Flags
+	var configFile string
+	flag.StringVar(&configFile, "config", "config.yaml", "Config file to read settings from")
+	flag.Parse()
+
+	// Read settings from config file
+	var conf configuration.Config
+
 	bot, err := tgbotapi.NewBotAPI(token)
 	if err != nil {
 		log.Fatal(err)

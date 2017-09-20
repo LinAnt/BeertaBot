@@ -1,0 +1,7 @@
+
+beerbot:
+    daemon: false                                           # run in daemon mode
+    token: testtoken                                        # token provided from botfather
+
+database:
+    path: testpath                                             # Path to Sqlit3 database
