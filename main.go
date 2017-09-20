@@ -6,8 +6,6 @@ import (
 	"net/http"
 
 	"github.com/go-telegram-bot-api/telegram-bot-api"
-
-	"github.com/linant/beerbot/configuration"
 )
 
 var (
@@ -23,7 +21,7 @@ func main() {
 	flag.Parse()
 
 	// Read settings from config file
-	var conf configuration.Config
+	//var conf configuration.Config
 
 	bot, err := tgbotapi.NewBotAPI(token)
 	if err != nil {
