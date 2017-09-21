@@ -4,6 +4,7 @@ import (
 	"flag"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 )
@@ -12,12 +13,14 @@ var (
 	token        = "THIS_SHOULD_BE_SECRET_TOKEN"
 	databasePath = "/tmp/db"
 	configPath   = "/tmp"
+	port         = 8443
 )
 
 func main() {
 	//Flags
 	var configFile string
 	flag.StringVar(&configFile, "config", "config.yaml", "Config file to read settings from")
+	flag.IntVar(&port, "port", 8080, "Port to listen to (default: 8443")
 	flag.Parse()
 
 	// Read settings from config file
@@ -38,7 +41,8 @@ func main() {
 	}
 
 	updates := bot.ListenForWebhook("/" + bot.Token)
-	go http.ListenAndServeTLS("0.0.0.0:8443", "cert.pem", "key.pem", nil)
+
+	go http.ListenAndServeTLS("0.0.0.0:"+strconv.Itoa(port), "cert.pem", "key.pem", nil)
 
 	for update := range updates { // update channel
 		log.Printf("%+v\n", update)
