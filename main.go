@@ -39,14 +39,14 @@ func main() {
 	fmt.Println("Creating bot")
 	bot, err := tgbotapi.NewBotAPI(token)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	fmt.Println("Successfully created bot")
 	bot.Debug = true
 
 	log.Printf("Authorized on account %s", bot.Self.UserName)
 
-	_, err = bot.SetWebhook(tgbotapi.NewWebhookWithCert("https://www.google.com:8443/"+bot.Token, "cert.pem"))
+	_, err = bot.SetWebhook(tgbotapi.NewWebhookWithCert("https://www.google.com:8443/"+bot.Token, "/app/cert.pem"))
 	if err != nil {
 		log.Fatal(err)
 	}
