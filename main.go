@@ -41,7 +41,7 @@ func main() {
 	}
 	log.Println("Setting up webpage")
 	http.HandleFunc("/", handler)
-	http.ListenAndServe(":"+strconv.Itoa(port), nil)
+	go http.ListenAndServe(":"+strconv.Itoa(port), nil)
 	log.Println("We have webpage")
 
 	log.Println("Creating bot")
