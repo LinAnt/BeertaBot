@@ -24,7 +24,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	//Flags
-	fmt.Println("Parsing flags")
+	log.Println("Parsing flags")
 	// Try to get port from env, if fails we set envPort to -1 and hope we get port from flags
 	envPort, err := strconv.Atoi(os.Getenv("BOT_PORT"))
 	if err != nil {
@@ -39,11 +39,12 @@ func main() {
 		// We are in an unrecoverable state, lets panic
 		panic("No port specified")
 	}
-
+	log.Println("Setting up webpage")
 	http.HandleFunc("/", handler)
 	http.ListenAndServe(":"+strconv.Itoa(port), nil)
+	log.Println("We have webpage")
 
-	fmt.Println("Creating bot")
+	log.Println("Creating bot")
 	bot, err := tgbotapi.NewBotAPI(token)
 	if err != nil {
 		panic(err)
