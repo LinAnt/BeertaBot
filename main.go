@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"strconv"
 
@@ -16,6 +17,10 @@ var (
 	configPath   = "/tmp"
 	port         = -1
 )
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprint(w, "Here be bots and beer!")
+}
 
 func main() {
 	//Flags
@@ -34,6 +39,9 @@ func main() {
 		// We are in an unrecoverable state, lets panic
 		panic("No port specified")
 	}
+
+	http.HandleFunc("/", handler)
+	http.ListenAndServe(":"+strconv.Itoa(port), nil)
 
 	fmt.Println("Creating bot")
 	bot, err := tgbotapi.NewBotAPI(token)
