@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 	"strconv"
 
@@ -41,21 +40,26 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Successfully created bot")
+
 	bot.Debug = true
 
 	log.Printf("Authorized on account %s", bot.Self.UserName)
 
-	_, err = bot.SetWebhook(tgbotapi.NewWebhookWithCert("https://www.google.com:8443/"+bot.Token, "/app/cert.pem"))
-	if err != nil {
-		log.Fatal(err)
-	}
+	u := tgbotapi.NewUpdate(0)
+	u.Timeout = 60
 
-	updates := bot.ListenForWebhook("/" + bot.Token)
+	updates, err := bot.GetUpdatesChan(u)
 
-	go http.ListenAndServeTLS("0.0.0.0:"+strconv.Itoa(port), "cert.pem", "key.pem", nil)
+	for update := range updates {
+		if update.Message == nil {
+			continue
+		}
 
-	for update := range updates { // update channel
-		log.Printf("%+v\n", update)
+		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
+
+		msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
+		msg.ReplyToMessageID = update.Message.MessageID
+
+		bot.Send(msg)
 	}
 }
